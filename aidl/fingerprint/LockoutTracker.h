@@ -9,6 +9,7 @@
 
 #include <android/binder_to_string.h>
 #include <stdint.h>
+#include <sstream>
 #include <string>
 
 #define LOCKOUT_TIMED_THRESHOLD 5
@@ -19,7 +20,8 @@ namespace aidl::android::hardware::biometrics::fingerprint {
 
 class LockoutTracker {
   public:
-    LockoutTracker() : mFailedCount(0) {}
+    LockoutTracker()
+        : mFailedCount(0), mLockoutTimedStart(0), mCurrentMode(LockoutMode::kNone) {}
     ~LockoutTracker() {}
 
     enum class LockoutMode : int8_t { kNone = 0, kTimed, kPermanent };
