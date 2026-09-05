@@ -1,0 +1,22 @@
+name: UDFPS bounded read contracts
+
+on:
+  push:
+    branches: [revival/udfps-bounded-read]
+  pull_request:
+    branches: [lineage-23.2]
+    paths: [sensors/v2/**, tests/test_udfps_read.py, .github/workflows/revival-sensor-tests.yml]
+
+permissions:
+  contents: read
+
+jobs:
+  native-contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Compile and run production-method contracts with ASan and UBSan
+        run: python3 -m unittest discover -s tests -p 'test_udfps_read.py' -v
