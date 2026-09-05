@@ -1,0 +1,22 @@
+name: Fingerprint lockout initialization contracts
+
+on:
+  push:
+    branches: [revival/lockout-initialization]
+  pull_request:
+    branches: [lineage-23.2]
+    paths: [aidl/fingerprint/**, tests/test_lockout_tracker.py, .github/workflows/revival-lockout-tests.yml]
+
+permissions:
+  contents: read
+
+jobs:
+  native-contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Compile production lockout methods and test with a controlled clock
+        run: python3 -m unittest discover -s tests -p 'test_lockout_tracker.py' -v

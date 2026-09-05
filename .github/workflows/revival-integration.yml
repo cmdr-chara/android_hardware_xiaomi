@@ -1,0 +1,23 @@
+name: Combined Xiaomi native contracts (not an Android build)
+
+on:
+  push:
+    branches: [revival/integration-20260905]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Run UDFPS and lockout contracts together
+        run: |
+          git rev-parse HEAD
+          python3 -m unittest discover -s tests -p 'test_*.py' -v
+          git diff --exit-code
