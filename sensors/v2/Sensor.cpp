@@ -369,7 +369,7 @@ void UdfpsSensor::fillEventData(Event& event) {
 }
 
 bool UdfpsSensor::readFd(const int fd) {
-    char buffer[512];
+    char buffer[512] = {};
     int state = 0;
     int rc;
 
@@ -378,8 +378,9 @@ bool UdfpsSensor::readFd(const int fd) {
         ALOGE("failed to seek: %d", rc);
         return false;
     }
-    rc = read(fd, &buffer, sizeof(buffer));
-    if (rc < 0) {
+    // read() does not append a terminator; reserve one byte for sscanf.
+    rc = read(fd, buffer, sizeof(buffer) - 1);
+    if (rc <= 0) {
         ALOGE("failed to read state: %d", rc);
         return false;
     }
