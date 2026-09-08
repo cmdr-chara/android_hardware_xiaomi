@@ -146,7 +146,7 @@ prebuilt_hidl_interfaces {
 
 aidl_interface {
     name: "vendor.xiaomi.hardware.aidl.mtdservice",
-    device_specific: true,
+    soc_specific: true,
     owner: "xiaomi",
     local_include_dir: "aidl",
     stability: "vintf",
